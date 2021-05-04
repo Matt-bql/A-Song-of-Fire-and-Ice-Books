@@ -1,7 +1,12 @@
 import React from "react";
 
-function BookContent({ data }) {
-  return <div>{console.log(data)}</div>;
+function BookContent({ data, filteredData }) {
+  return (
+    <div>
+      {filteredData.map((d) => (
+        <div key={d.name}>{d}</div>
+      ))}
+    </div>
+  );
 }
 export default BookContent;
-//

@@ -6,7 +6,7 @@ import CharacterContent from "./CharacterContent";
 import HouseContent from "./HouseContent";
 // import Modal from "./Modal";
 class Container extends React.Component {
-  state = { showList: false, data: [], modalIsOpen: false };
+  state = { showList: false, data: [], modalIsOpen: false, filteredData: [] };
 
   componentDidMount() {
     try {
@@ -25,6 +25,7 @@ class Container extends React.Component {
       console.log("error fetching data", err);
     }
   }
+  // FUNCTIONS
   closeList = () => {
     this.setState({ showList: false });
   };
@@ -32,15 +33,25 @@ class Container extends React.Component {
     this.setState({ modalIsOpen: true });
   };
 
+  handleClick = (id) => {
+    const { data } = this.state;
+    const newArray = data.filter((dat) => {
+      return dat === id;
+    });
+    this.setState({ filteredData: newArray });
+    console.log(newArray);
+  };
+
   render() {
-    const { showList, data, modalIsOpen } = this.state;
+    const { showList, data, modalIsOpen, filteredData } = this.state;
     // const { type } = this.props;
+    console.log(this.state.filteredData);
     return (
       <div>
         <div>
           <p
-            className="isClickablePointer"
-            style={{ color: this.props.item.color }}
+            className="category-item-style"
+            // style={{ color: this.props.item.color }}
             onClick={() => {
               this.setState({ showList: true });
             }}
@@ -52,12 +63,15 @@ class Container extends React.Component {
             isListOpen={showList}
             data={data}
             setModalOpen={this.setModalOpen}
+            handleClick={this.handleClick}
           />{" "}
         </div>
         <div>
           {modalIsOpen && (
-            <Modal>
-              {this.props.item.type === "Books" && <BookContent data={data} />}
+            <Modal data={data}>
+              {this.props.item.type === "Books" && (
+                <BookContent data={data} filteredData={filteredData} />
+              )}
               {this.props.item.type === "Characters" && <CharacterContent />}
               {this.props.item.type === "Houses" && <HouseContent />}
             </Modal>
